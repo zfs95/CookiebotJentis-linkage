@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JENTIS Consent Engine Test</title>
+        <script
+            id="Cookiebot"
+            src="https://consent.cookiebot.com/uc.js"
+            data-cbid="20ac47c4-8099-4ccf-aaba-ee1d892808ea"
+            type="text/javascript"
+            async
+        ></script>
+        <script
+            id="CookieDeclaration"
+            src="https://consent.cookiebot.com/20ac47c4-8099-4ccf-aaba-ee1d892808ea/cd.js"
+            type="text/javascript"
+            async
+        ></script>
+        <script src="../JentisConsentEngine.js" defer></script>
+        <script src="./test_conf.js" defer></script>
+        <script src="./JCE_bridge_GTM.js" defer></script>
+
+        <script>
+            document.addEventListener(
+                "jentis.consent.engine.minimal-consent-given",
+                function (e) {
+                    console.log("Miniaml Consent is given: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.no-consent-given",
+                function (e) {
+                    console.log("No Consent is given: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.send-consent-data",
+                function (e) {
+                    console.log("SEND Consent to Server: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.show-bar",
+                function (e) {
+                    console.log("Show Bar now: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.vendor-change",
+                function (e) {
+                    console.log("Vendor Changed: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.vendor-add",
+                function (e) {
+                    console.log("Vendor Add: %o", e.detail);
+                }
+            );
+
+            document.addEventListener(
+                "jentis.consent.engine.init",
+                function (e) {
+                    console.log("CMP Init: %o", e.detail);
+                }
+            );
+        </script>
+        <script>
+            function acceptAll() {
+                if (window.jentis) {
+                    jentis.consent.engine.AcceptAll();
+                }
+
+                if (window.Cookiebot) {
+                    window.Cookiebot.submitCustomConsent(true, true, true);
+                }
+            }
+
+            function denyAll() {
+                if (window.jentis) {
+                    jentis.consent.engine.DenyAll();
+                }
+
+                if (window.Cookiebot) {
+                    this.Cookiebot.submitCustomConsent(false, false, false);
+                }
+            }
+
+            function acceptGa(obj = { ga: true, fb: true }) {
+                if (window.jentis) {
+                    jentis.consent.engine.setNewVendorConsents(obj);
+                }
+
+                if (window.Cookiebot) {
+                    const oVendorInfo =
+                        jentis.consent.engine.getVendorFullData();
+
+                    let consents = {};
+                    for (vendor in oVendorInfo) {
+                        if (!consents[vendor["purpose"]["id"]]) {
+                            consents[
+                                (vendor["purpose"]["id"] = vendor["status"])
+                            ];
+                        }
+                    }
+                    Cookiebot.submitCustomConsent(
+                        (consents["pref"] = false),
+                        consent["stat"],
+                        consent["mark"]
+                    );
+                }
+            }
+
+            function MigrateOldConsent() {
+                if (window.jentis) {
+                    var aData = {
+                        consentid: "TESTTESTTEST",
+                        lastupdate: 100,
+                        vendors: { ga: true, fb: false, adw: false },
+                    };
+                    var sJson = JSON.stringify(aData);
+
+                    //Now write it to the local storage
+                    localStorage.setItem("jentis.consent.data", sJson);
+                    jentis.consent.engine.setNewVendorConsents(aData.vendors);
+                }
+                var aAllConsent = jentis.consent.engine.getAllConsents();
+                let pref = false;
+                let stat = aAllConsent["ga"];
+                let mark = aAllConsent["fb"];
+
+                if (window.Cookiebot) {
+                    Cookiebot.submitCustomConsent(pref, stat, mark);
+                }
+            }
+
+            function MigrateInTimeConsent() {
+                if (window.jentis) {
+                    var aData = {
+                        consentid: "TESTTESTTEST",
+                        lastupdate: Date.now() - 1000,
+                        vendors: { ga: true, fb: false, adw: false },
+                    };
+                    var sJson = JSON.stringify(aData);
+
+                    //Now write it to the local storage
+                    localStorage.setItem("jentis.consent.data", sJson);
+                    jentis.consent.engine.setNewVendorConsents(aData.vendors);
+                }
+                var aAllConsent = jentis.consent.engine.getAllConsents();
+                let pref = false;
+                let stat = aAllConsent["ga"];
+                let mark = aAllConsent["fb"];
+
+                if (window.Cookiebot) {
+                    Cookiebot.submitCustomConsent(pref, stat, mark);
+                }
+            }
+        </script>
+        <style>
+            button {
+                display: block;
+                margin-bottom: 20px;
+                min-width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="accept-all" onclick="acceptAll()">Accept All</button>
+        <button id="accept-ga" onclick="acceptGa()">Accept GA</button>
+        <button id="deny-all" onclick="denyAll()">DENY All</button>
+        <button id="migrate-old" onclick="MigrateOldConsent()">
+            Do old consent OUT OF TIME
+        </button>
+        <button id="migrate-in-time" onclick="MigrateInTimeConsent()">Do old consent IN TIME</button>
+    </body>
+</html>
