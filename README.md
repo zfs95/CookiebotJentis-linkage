@@ -22,13 +22,14 @@ So for example: did the user accept the tracking for Google Analytics or not.
 
 ## Goal
 The goal is to write a bridge between our JENTIS Consent Engine and the consent bar Cookiebot.
-1. Checkout the JENTIS Consent Engine.
-2. Read and understand the JENTIS Consent Engine documentation.
-3. Get a demo version of Cookiebot and set up the Cookiebot at the test html page.
-4. Run the test page html.
-5. Whenever the user is giving a consent you must listen to it and hand over this information to the JENTIS
-Consent Engine.
-
+<ol>
+    <li> Checkout the JENTIS Consent Engine.</li>
+<li> Read and understand the JENTIS Consent Engine documentation.</li>
+<li> Get a demo version of Cookiebot and set up the Cookiebot at the test html page.</li>
+<li> Run the test page html.</li>
+<li> Whenever the user is giving a consent you must listen to it and hand over this information to the JENTIS
+Consent Engine.</li>
+</ol>
 ## Resources
 
 1. Checkout the JENTIS consent engine
@@ -41,21 +42,22 @@ https://www.cookiebot.com/de/developer/
 ## Hints
 
 Hints
-● At the JENTIS Consent Engine you will find a test directory.
-● In this directory you will find an example configuration. This configuration includes some vendor definitions.
+<ul>
+    <li> At the JENTIS Consent Engine you will find a test directory.</li>
+<li> In this directory you will find an example configuration. This configuration includes some vendor definitions.
 These are the vendors which are set at the JENTIS Systems. For these vendors we must know if we are
-allowed to track or not.
-Seite 1 von 2
-● In this directory you will find a test page html file. Execute it directly and you can run the Consent Engine locally
-standalone (don't forget to add the basic code of Cookiebot)
-● If you are doing it all right, you will need at least the following events and infos by the JENTIS Consent Engine
-○ jentis.consent.engine.getVendorFullData
-○ jentis.consent.engine.setNewVendorConsents
-● Cookiebot is setting the consent per purpose (statistic, marketing, preferences). Use the purpose.id field at the
+allowed to track or not.</li>
+<li> In this directory you will find a test page html file. Execute it directly and you can run the Consent Engine locally
+standalone (don't forget to add the basic code of Cookiebot)</li>
+<li> If you are doing it all right, you will need at least the following events and infos by the JENTIS Consent Engine: </li>
+<li> jentis.consent.engine.getVendorFullData</li>
+<li> jentis.consent.engine.setNewVendorConsents</li>
+<li> Cookiebot is setting the consent per purpose (statistic, marketing, preferences). Use the purpose.id field at the
 example config of the Consent Engine to match the vendors at JENTIS with the given Consents from
-Cookiebot.
-● The test html page includes some event listener and console logs too. If you do a good job you should see
-something in the browser’s javascript console.
+Cookiebot.</li>
+<li> The test html page includes some event listener and console logs too. If you do a good job you should see
+something in the browser’s javascript console.</li>
+    </ul>
 
 ## Legal Information
 Our dev team already developed the bridge to the Cookiebot.
